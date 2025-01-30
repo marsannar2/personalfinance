@@ -3,9 +3,10 @@ package com.marsannar2.personalfinance.account;
 import com.marsannar2.personalfinance.models.BaseEntity;
 import com.marsannar2.personalfinance.user.User;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -18,13 +19,14 @@ import lombok.Setter;
 @Table(name="accounts")
 public class Account extends BaseEntity{
     
-    @Column(name="quantity",precision=2,nullable=false)
-    private Double quantity;
+    @Column(nullable=false)
+    private Double amount;
 
     @Column(name="account_type",nullable=false)
+    @Enumerated(value= EnumType.STRING)
     private AccountType type;
 
-    @Column(name="connection")
+    @Column(name="bank_connection")
     private String connection;
 
     @JoinColumn(name="user_id",referencedColumnName = "id",nullable=false)

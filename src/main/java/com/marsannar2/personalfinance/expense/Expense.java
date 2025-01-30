@@ -17,13 +17,13 @@ import lombok.Setter;
 @Table(name="expenses")
 public class Expense extends BaseEntity{
     
-    @Column(nullable=false,length = 128)
+    @Column(nullable=false,length = 128,unique = true)
     private String name;
 
-    @Column(nullable=false,precision = 2)
+    @Column(nullable=false)
     private Double assigned;
 
-    @Column(nullable=false,precision = 2)
+    @Column(nullable=false)
     private Double target;
 
     @Column(name="target_is_reached",nullable=false)

@@ -5,6 +5,8 @@ import com.marsannar2.personalfinance.models.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -18,17 +20,18 @@ import lombok.Setter;
 @Table(name="transactions")
 public class Transaction extends BaseEntity{
     
-    @Column(nullable=false,precision = 2)
-    private Double quantity;
+    @Column(nullable=false)
+    private Double amount;
 
     @Column(nullable=false)
+    @Enumerated(value= EnumType.STRING)
     private MoneyFlow money_flow;
 
     @Column(nullable=false,length=128)
     @NotBlank
     private String description;
 
-    @JoinColumn(name="user_id",referencedColumnName = "id",nullable=false)
+    @JoinColumn(name="account_id",referencedColumnName = "id",nullable=false)
     @ManyToOne(optional=false)
     private Account account;
 
