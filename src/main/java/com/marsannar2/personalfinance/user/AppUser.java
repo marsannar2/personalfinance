@@ -1,5 +1,11 @@
 package com.marsannar2.personalfinance.user;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.marsannar2.personalfinance.models.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -14,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="appusers")
-public class User extends BaseEntity{
+public class AppUser extends BaseEntity implements UserDetails{
 
     @Column(length = 128,nullable=false,unique=true)
     @NotBlank
@@ -27,6 +33,11 @@ public class User extends BaseEntity{
     @Email
     @Column(nullable=false,unique=true)
     private String email;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 
     
 }

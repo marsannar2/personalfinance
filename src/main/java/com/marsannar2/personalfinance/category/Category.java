@@ -1,7 +1,7 @@
 package com.marsannar2.personalfinance.category;
 
 import com.marsannar2.personalfinance.models.BaseEntity;
-import com.marsannar2.personalfinance.user.User;
+import com.marsannar2.personalfinance.user.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +22,6 @@ public class Category extends BaseEntity{
 
     @JoinColumn(name="user_id",referencedColumnName = "id",nullable=false)
     @ManyToOne(optional=false)
-    private User user;
+    private AppUser user;
     
 }

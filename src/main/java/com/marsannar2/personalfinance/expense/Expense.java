@@ -1,7 +1,7 @@
 package com.marsannar2.personalfinance.expense;
 import com.marsannar2.personalfinance.category.Category;
 import com.marsannar2.personalfinance.models.BaseEntity;
-import com.marsannar2.personalfinance.user.User;
+import com.marsannar2.personalfinance.user.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ public class Expense extends BaseEntity{
 
     @JoinColumn(name="user_id",referencedColumnName = "id",nullable=false)
     @ManyToOne(optional=false)
-    private User user;
+    private AppUser user;
 
     @JoinColumn(name="category_id",referencedColumnName = "id",nullable=false)
     @ManyToOne(optional=false)
