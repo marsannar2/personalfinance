@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="appusers")
-public class AppUser extends BaseEntity implements UserDetails{
+public class AppUser extends BaseEntity{
 
     @Column(length = 128,nullable=false,unique=true)
     @NotBlank
@@ -34,10 +34,6 @@ public class AppUser extends BaseEntity implements UserDetails{
     @Column(nullable=false,unique=true)
     private String email;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
 
     
 }
