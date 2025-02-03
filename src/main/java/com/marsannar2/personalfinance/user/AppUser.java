@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="appusers")
-public class AppUser extends BaseEntity{
+public class AppUser extends BaseEntity implements UserDetails{
 
     @Column(length = 128,nullable=false,unique=true)
     @NotBlank
@@ -33,6 +33,31 @@ public class AppUser extends BaseEntity{
     @Email
     @Column(nullable=false,unique=true)
     private String email;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       return List.of();
+    }
+
+    @Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 
 
     

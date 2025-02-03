@@ -34,10 +34,7 @@ import jakarta.persistence.SequenceGenerator;
 public class BaseEntity {
 
 	@Id
-	@SequenceGenerator(name = "entity_seq", 
-        sequenceName = "entity_sequence", 
-        initialValue = 100)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE	, generator = "entity_seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 
 	public Integer getId() {
