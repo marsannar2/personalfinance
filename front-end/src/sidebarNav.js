@@ -24,9 +24,10 @@ function SideBarNav() {
                     <NavItem classname="nav-item">
                         <NavLink className = "nav-link" tag={Link} to="/accounts">All Accounts</NavLink>
                     </NavItem>
-                    <hr></hr>
+                    
                 </Nav>   
             </Navbar>
+            <hr></hr>
         </div>
        
       </>
