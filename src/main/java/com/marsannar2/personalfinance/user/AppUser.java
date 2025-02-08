@@ -1,11 +1,5 @@
 package com.marsannar2.personalfinance.user;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.marsannar2.personalfinance.models.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -20,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="appusers")
-public class AppUser extends BaseEntity implements UserDetails{
+public class AppUser extends BaseEntity{
 
     @Column(length = 128,nullable=false,unique=true)
     @NotBlank
@@ -34,31 +28,7 @@ public class AppUser extends BaseEntity implements UserDetails{
     @Column(nullable=false,unique=true)
     private String email;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-       return List.of();
-    }
-
-    @Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
+	
 
     
 }

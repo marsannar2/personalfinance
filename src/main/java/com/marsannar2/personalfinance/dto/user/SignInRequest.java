@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RegisterUserDTO {
+public class SignInRequest {
 
     @Column(length = 128,nullable=false,unique=true)
     @NotBlank
