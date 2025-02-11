@@ -38,9 +38,9 @@ public class AppUserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity registerUser(@Valid @RequestBody SignInRequest registerUserDto) {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignInRequest registerUserDto) {
         if(userService.userExists(registerUserDto.getUsername())){
             return ResponseEntity.badRequest().body(new MessageResponse("User already exists!"));
         }else{

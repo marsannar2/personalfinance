@@ -17,11 +17,11 @@ function SideBarNav() {
                         <NavLink className = "nav-link" tag={Link} to="/budget">Budget</NavLink>
                     </NavItem>
                     
-                    <NavItem classname="nav-item">
+                    <NavItem className="nav-item">
                         <NavLink className = "nav-link" tag={Link} to="/users">Stats</NavLink>
                     </NavItem>
                     
-                    <NavItem classname="nav-item">
+                    <NavItem className="nav-item">
                         <NavLink className = "nav-link" tag={Link} to="/accounts">All Accounts</NavLink>
                     </NavItem>
                     
