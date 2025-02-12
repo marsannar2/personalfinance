@@ -1,20 +1,21 @@
 import { useState } from "react";
-import "./Userregister.css";
 import { useNavigate } from 'react-router-dom';
+import "./Userregister.css";
 
 
 
-function Useregister(){
+function UserLogin(){
 
-    const [credentials, setCredentials] = useState({username:"",password:"",email:""});
+    const [credentials, setCredentials] = useState({username:"",password:""});
     const [message, setMessage] = useState(null);
     const navigate = useNavigate();
+    
 
     async function handleSubmit(event){
         event.preventDefault()
-
         try {
-            const response = await fetch("signup", {
+            
+            const response = await fetch("login", {
               headers: { "Content-Type": "application/json" },
               method: "POST",
               body: JSON.stringify(credentials),
@@ -24,9 +25,9 @@ function Useregister(){
             if (!response.ok) {
               throw new Error(data.message || "Error en la solicitud.");
             }
-            
+        
             setMessage(data.message || "Registro exitoso");
-            navigate('/users/signin', { replace: true });
+            navigate('/budget', { replace: true });
           } catch (error) {
             setMessage(error.message || "Ocurrió un error inesperado");
           }           
@@ -42,7 +43,7 @@ function Useregister(){
 
     return(
         <div className="form-container">
-            <h1 align-items="center">User Register</h1>
+            <h1 align-items="center">User Login</h1>
             <form className = "form" onSubmit={handleSubmit}>
                 {message && <p>{message}</p>}
                 <label className="form-input">Enter your username:
@@ -63,16 +64,6 @@ function Useregister(){
                     required
                     />
                 </label>
-            
-                <label className="form-input">Enter your email:
-                    <input 
-                        type="text"
-                        name="email" 
-                        value={credentials.email} 
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
                 <button className="input" type="submit" value="Submit">Submit</button>
             </form>
         </div>
@@ -80,4 +71,4 @@ function Useregister(){
     )
 
 }
-export default Useregister;
+export default UserLogin;
