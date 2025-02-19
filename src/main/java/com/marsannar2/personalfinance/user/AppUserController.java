@@ -66,16 +66,12 @@ public class AppUserController {
 
     @PostMapping("/login")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
-        Boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
         try{
             AppUser user = userService.findByUsername(loginRequest.getUsername());
 
             if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
                 return ResponseEntity.badRequest().body(new MessageResponse(" Incorrect password, try again "));
                 
-            }else if(isAuthenticated){
-                return ResponseEntity.badRequest().body(
-                        new MessageResponse("You are already logged in!"));
             }else{
                 Authentication authenticationRequest =
                 UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
@@ -92,15 +88,4 @@ public class AppUserController {
 
     }
     
-    @PostMapping("/logout")
-    public ResponseEntity logOutUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws  AuthenticationException{
-        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-        logoutHandler.logout(request,response,authentication);
-        if(authentication.isAuthenticated()){
-            throw new AuthenticationException("cant logout");
-        }else{
-            return ResponseEntity.ok().body(new MessageResponse("User logged out"));
-        }
-        
-    }
 }

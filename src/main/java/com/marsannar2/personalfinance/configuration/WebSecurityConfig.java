@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,12 +39,27 @@ public class WebSecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests((requests) -> {
-                requests.anyRequest().permitAll();
+        HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES));
+        http
+            .sessionManagement(session -> session
+                    .maximumSessions(1)
+            )
+            .authorizeHttpRequests((requests) -> {
+                requests
+                .anyRequest().permitAll();
             }
-        ).csrf(AbstractHttpConfigurer::disable);
+            ).csrf(AbstractHttpConfigurer::disable)
+            .logout((logout) -> logout.logoutUrl("/users/logout")
+                                      .logoutSuccessUrl("/users/logout/success")
+                                      .addLogoutHandler(clearSiteData));
 
         return http.build();
+    }
+
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     @Autowired
