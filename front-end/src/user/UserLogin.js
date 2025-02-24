@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import "./Userregister.css";
+import "./styles/Userregister.css";
 
 
 

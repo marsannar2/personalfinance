@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Userregister.css";
+import "./styles/Userregister.css";
 import { useNavigate } from 'react-router-dom';
 
 

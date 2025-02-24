@@ -50,7 +50,6 @@ public class WebSecurityConfig{
             }
             ).csrf(AbstractHttpConfigurer::disable)
             .logout((logout) -> logout.logoutUrl("/users/logout")
-                                      .logoutSuccessUrl("/users/logout/success")
                                       .addLogoutHandler(clearSiteData));
 
         return http.build();

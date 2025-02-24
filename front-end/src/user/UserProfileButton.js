@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom"; 
-import "./UserProfileButton.css";
+import "./styles/UserProfileButton.css";
 
 function UserProfileButton(){
 
@@ -8,16 +8,14 @@ function UserProfileButton(){
 
 
     return(
-        <div className="user-profile-button" >   
-            <button className="auth-button">
-                <img className = "profile-icon" src = "profile-icon.jpg" alt="profile-picture" ></img>
-                <Link to={`users/profile`} className="auth-button" style={{ textDecoration: "none" }}></Link>  
-                <p>{user.username} </p>
-                <p>{user.email} </p>
-            </button>                
-        </div>
-        
-        
+        <button className="auth-button" type="button">
+            <img className = "profile-icon" src = "profile-icon.jpg" alt="profile-picture" ></img>
+            <div className="user-info-container">
+                <p className="profile-text"><Link to={`users/profile`} style={{ textDecoration: "none" }}> {user.username}´s Budget </Link></p>
+                <p className="profile-text">{user.email} </p>
+            </div>
+            
+        </button>        
     )
 
 
