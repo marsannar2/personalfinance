@@ -2,46 +2,69 @@ package com.marsannar2.personalfinance.configuration;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.marsannar2.personalfinance.user.AppUserService;
+import com.marsannar2.personalfinance.configuration.userDetails.UserDetailsServiceImpl;
+
 
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig{
 
-    private final AppUserService appUserService;
-
-    public WebSecurityConfig(AppUserService appUserService){
-        this.appUserService = appUserService;
-    }
+    @Autowired
+	UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests((requests) -> {
-                requests.requestMatchers("/users/register").permitAll()
-                .anyRequest().authenticated();
+        HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES));
+        http
+            .sessionManagement(session -> session
+                    .maximumSessions(1)
+            )
+            .authorizeHttpRequests((requests) -> {
+                requests
+                .anyRequest().permitAll();
             }
-        ).csrf(AbstractHttpConfigurer::disable);
+            ).csrf(AbstractHttpConfigurer::disable)
+            .logout((logout) -> logout.logoutUrl("/users/logout")
+                                      .addLogoutHandler(clearSiteData));
 
         return http.build();
     }
+
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    @Autowired
+	public void configure(AuthenticationManagerBuilder builder) {
+		builder.eraseCredentials(true);
+	}
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -52,7 +75,10 @@ public class WebSecurityConfig{
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(userDetailsService);
+
+        ProviderManager providerManager = new ProviderManager(provider);
+		providerManager.setEraseCredentialsAfterAuthentication(true);
         return provider;
     }
 

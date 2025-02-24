@@ -14,16 +14,21 @@
 
   .nav-item {
     display: flex;
-    flex-direction: row;
+    flex-direction:row;
     justify-content: center;
-    align-items: center;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 12px 20px;
-    margin: 5px 0;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
     height: 3em;
+    
+  }
+
+  .navbar{
+    align-items:center;
+    
+
   }
   
 
@@ -34,10 +39,10 @@
     padding: 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
-    font-family: sans-serif;
+    font-family: Rockwell, 'Rockwell Nova', 'Roboto Slab', 'DejaVu Serif', 'Sitka Small', serif;
+    font-weight: normal;
     box-sizing: border-box;
     font-size: 1rem;
-    font-weight: 500;
   }
   
   .nav-link:hover{

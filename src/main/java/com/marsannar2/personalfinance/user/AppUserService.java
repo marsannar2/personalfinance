@@ -2,30 +2,33 @@ package com.marsannar2.personalfinance.user;
 
 
 
-import java.util.List;
+
 import java.util.Optional;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
 
 
 
 
 @Service
-public class AppUserService implements UserDetailsService{
+public class AppUserService{
 
     private final AppUserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public AppUserService(AppUserRepository userRepository){
+    public AppUserService(AppUserRepository userRepository,BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     public AppUser findByUsername(String username){
         Optional<AppUser> user = userRepository.findByUsername(username);
         if(user.isPresent()){
@@ -37,20 +40,15 @@ public class AppUserService implements UserDetailsService{
     }
 
     @Transactional
-    public AppUser register(AppUser user){
+    public void register(AppUser user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return user;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser user = userRepository.findByUsername(username)
-        .orElseThrow(()->new UsernameNotFoundException("user not found"));
-
-        return User.withUsername(user.getUsername())
-        .password(user.getPassword())
-        .authorities(List.of()) 
-        .build();
+    @Transactional(readOnly=true)
+    public boolean userExists(String username){
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        return user.isPresent();
     }
 
     
