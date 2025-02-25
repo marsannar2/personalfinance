@@ -1,10 +1,10 @@
 package com.marsannar2.personalfinance.expense;
-import com.marsannar2.personalfinance.category.Category;
 import com.marsannar2.personalfinance.models.BaseEntity;
 import com.marsannar2.personalfinance.user.AppUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -20,6 +20,9 @@ public class Expense extends BaseEntity{
     @Column(nullable=false,length = 128,unique = true)
     private String name;
 
+    @Column(length=512)
+    private String notes;
+
     @Column(nullable=false)
     private Double assigned;
 
@@ -29,13 +32,16 @@ public class Expense extends BaseEntity{
     @Column(name="target_is_reached",nullable=false)
     private Boolean targetIsReached;
 
+    @Enumerated
+    @Column(nullable=false)
+    private ExpenseType expense_type;
+
     @JoinColumn(name="user_id",referencedColumnName = "id",nullable=false)
     @ManyToOne(optional=false)
     private AppUser user;
 
-    @JoinColumn(name="category_id",referencedColumnName = "id",nullable=false)
-    @ManyToOne(optional=false)
-    private Category category;
+
+    
 
     
 

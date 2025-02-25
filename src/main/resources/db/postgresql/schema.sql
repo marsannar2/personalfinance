@@ -1,6 +1,4 @@
 
-
-
 CREATE TABLE IF NOT EXISTS appusers (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
@@ -17,23 +15,17 @@ CREATE TABLE IF NOT EXISTS accounts (
     FOREIGN KEY (user_id) REFERENCES appusers(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS categories (
-    id SERIAL PRIMARY KEY,
-    category VARCHAR(255) NOT NULL UNIQUE,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES appusers(id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS expenses (
     id SERIAL PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
     assigned DOUBLE PRECISION NOT NULL,
+    notes VARCHAR(512),
     target DOUBLE PRECISION NOT NULL,
     target_is_reached BOOLEAN NOT NULL,
+    expense_type VARCHAR(55) NOT NULL,
     user_id BIGINT NOT NULL,
-    category_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES appusers(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES appusers(id) ON DELETE CASCADE
+    
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
