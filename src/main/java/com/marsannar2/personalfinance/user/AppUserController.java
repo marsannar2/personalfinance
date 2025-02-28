@@ -1,5 +1,7 @@
 package com.marsannar2.personalfinance.user;
 
+import java.security.Principal;
+
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,12 @@ import com.marsannar2.personalfinance.dto.user.LoginRequest;
 import com.marsannar2.personalfinance.dto.user.SignInRequest;
 import com.marsannar2.personalfinance.utils.response.MessageResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping(value="/users")
@@ -37,9 +44,9 @@ public class AppUserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignInRequest registerUserDto) {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignInRequest registerUserDto,Principal principal) {
 
-        Boolean isAuthenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        Boolean isAuthenticated = principal!=null;
 
         if(userService.userExists(registerUserDto.getUsername())){
             return ResponseEntity.badRequest().body(new MessageResponse("User already exists!"));
@@ -54,19 +61,23 @@ public class AppUserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest,Principal principal){
         try{
             AppUser user = userService.findByUsername(loginRequest.getUsername());
+            Boolean isAuthenticated = principal!=null;
 
             if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
                 return ResponseEntity.badRequest().body(new MessageResponse(" Incorrect password, try again "));
                 
+            }else if(isAuthenticated){
+                return ResponseEntity.badRequest().body(new MessageResponse(" You are already authenticated "));
             }else{
                 Authentication authenticationRequest =
-                UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
                 Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
                 SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+                
 
                 return new ResponseEntity<>(authenticationResponse,HttpStatus.ACCEPTED);
 
@@ -76,5 +87,13 @@ public class AppUserController {
         }
 
     }
+
+    @GetMapping("/principal")
+    public ResponseEntity getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseEntity<>(authentication,HttpStatus.OK); 
+
+    }
+    
     
 }

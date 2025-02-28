@@ -1,5 +1,7 @@
 package com.marsannar2.personalfinance.configuration.userDetails;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +24,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		AppUser user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-		return UserDetailsImpl.build(user);
+				return new org.springframework.security.core.userdetails.User(
+					user.getUsername(), 
+					user.getPassword(), 
+					List.of()  
+				);
 	}
 
 }
