@@ -14,8 +14,8 @@ function SideBarNav() {
       <>
         <div className = "sidebar-nav">
             <UserProfileButton/>
-            <Navbar expand="md" dark color="dark">
-                <Nav className="navbar" navbar>
+            <Navbar  expand="md" dark color="dark">
+                <Nav fill variant="tabs" className="navbar" navbar>
                     <NavItem classname="nav-item">
                         <NavLink className = "nav-link" tag={Link} to="/budget">Budget</NavLink>
                     </NavItem>
